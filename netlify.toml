@@ -1,0 +1,5 @@
+# https://docs.netlify.com/configure-builds/file-based-configuration/#configuration-details
+
+[build]
+command = "npm run build"
+publish = "build"

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import 'modern-normalize/modern-normalize.css';
-	import '../app.scss';
-	import Favicon from './Favicon.svelte';
-	import Title from './Title.svelte';
+
+	import Favicon from '../lib/Favicon.svelte';
+	import Title from '../lib/Title.svelte';
+
+	export const prerender = true;
 </script>
 
 <Favicon />
