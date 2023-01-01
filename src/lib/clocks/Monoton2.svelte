@@ -3,14 +3,13 @@
 	import { onMount } from 'svelte';
 	import leftPad from '$lib/leftPad';
 
-	const time = writable('00:00:00');
+	const time = writable('00:00');
 
 	function setTime() {
 		const date = new Date();
 		const hours = date.getHours().toString();
 		const minutes = date.getMinutes().toString();
-		const seconds = date.getSeconds().toString();
-		time.set([leftPad(hours), leftPad(minutes), leftPad(seconds)].join(':'));
+		time.set([leftPad(hours), leftPad(minutes)].join(':'));
 	}
 	setTime();
 
@@ -42,7 +41,7 @@
 
 		.text {
 			font-family: Monoton;
-			font-size: 30ch;
+			font-size: 42ch;
 			color: hsl(0, 0%, 95%);
 		}
 	}

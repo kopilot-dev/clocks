@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { debounce } from 'lodash';
+	import { onMount } from 'svelte';
 
 	const AUTO = 'auto';
 	const NONE = 'none';
@@ -17,12 +18,14 @@
 
 	const hide = debounce(() => {
 		cursor.set(NONE);
-	}, 2000);
+	}, 500);
 
 	function mousemove() {
 		show();
 		hide();
 	}
+
+	onMount(hide);
 </script>
 
 <svelte:window on:mousemove={mousemove} />
