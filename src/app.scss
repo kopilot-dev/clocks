@@ -1,0 +1,17 @@
+:root {
+	user-select: none;
+}
+
+body {
+	font-family: 'Roboto Flex', sans-serif;
+	font-weight: 400;
+	background-color: hsl(0, 0%, 15%);
+	color: hsl(0, 0%, 95%);
+}
+
+@media (prefers-color-scheme: light) {
+	body {
+		background-color: hsl(0, 0%, 95%);
+		color: hsl(0, 0%, 15%);
+	}
+}
