@@ -1,53 +1,49 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
-	import leftPad from '$lib/leftPad';
+	import AutoFontSize from '$lib/AutoFontSize.svelte';
+	import Monoton from '$lib/clocks/Monoton.svelte';
 
-	const time = writable('00:00:00');
-
-	function setTime() {
-		const date = new Date();
-		const hours = date.getHours().toString();
-		const minutes = date.getMinutes().toString();
-		const seconds = date.getSeconds().toString();
-		time.set([leftPad(hours), leftPad(minutes), leftPad(seconds)].join(':'));
-	}
-	setTime();
-
-	onMount(() => {
-		const interval = setInterval(setTime, 200);
-
-		return () => {
-			clearInterval(interval);
-		};
-	});
+	const clocks = [{ path: '/monoton', component: Monoton }];
 </script>
 
-<section>
-	<p>{$time}</p>
-</section>
+<div class="grid">
+	{#each clocks as clock}
+		<a href={clock.path}>
+			<AutoFontSize initialWidth={300}>
+				<svelte:component this={Monoton} />
+			</AutoFontSize>
+		</a>
+	{/each}
+</div>
 
-<style>
-	section {
+<style lang="scss">
+	.grid {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-evenly;
 		height: 100vh;
 		overflow: hidden;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: none;
-	}
+		background: linear-gradient(135deg, hsl(255, 60%, 35%) 5%, hsl(339, 60%, 35%) 95%);
 
-	section p {
-		font-family: 'Monoton', sans-serif;
-		font-size: 16vw;
-		color: hsl(0, 0%, 95%);
-		filter: drop-shadow(0 0 0.02em hsl(0, 0%, 15%));
+		a {
+			position: relative;
+			width: 300px;
+			height: 200px;
+			cursor: pointer;
+			border-radius: 16px;
+			overflow: hidden;
+			transition: all 200ms;
+
+			&:hover {
+				box-shadow: 0 0 4rem hsla(0, 0%, 100%, 20%);
+			}
+		}
 	}
 
 	@media (prefers-color-scheme: light) {
-		section p {
-			color: hsl(0, 0%, 15%);
-			filter: drop-shadow(0 0 0.02em hsl(0, 0%, 95%));
+		.grid {
+			background: linear-gradient(135deg, hsl(255, 90%, 80%) 5%, hsl(339, 80%, 75%) 95%);
 		}
 	}
 </style>
