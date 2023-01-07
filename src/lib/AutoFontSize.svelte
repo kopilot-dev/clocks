@@ -24,7 +24,7 @@
 
 	onMount(() => {
 		setFontsize();
-		const id = setInterval(setFontsize, 200);
+		const id = setInterval(setFontsize, 20);
 
 		return () => {
 			clearInterval(id);

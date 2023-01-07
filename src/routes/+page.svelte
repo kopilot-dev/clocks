@@ -29,7 +29,7 @@
 		overflow: hidden;
 		background: linear-gradient(135deg, hsl(255, 60%, 35%) 5%, hsl(339, 60%, 35%) 95%);
 	}
-	
+
 	.grid {
 		position: relative;
 		display: flex;
@@ -49,10 +49,12 @@
 			cursor: pointer;
 			border-radius: 16px;
 			overflow: hidden;
+			transform: scale(1);
 			transition: all 200ms;
 
 			&:hover {
 				box-shadow: 0 0 4rem hsla(0, 0%, 100%, 20%);
+				transform: scale(1.1);
 			}
 		}
 	}

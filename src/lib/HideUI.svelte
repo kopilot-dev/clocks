@@ -1,23 +1,23 @@
 <script lang="ts">
 	import { writable } from 'svelte/store';
 	import { debounce } from 'lodash';
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 
-	const AUTO = 'auto';
-	const NONE = 'none';
+	const hideUI = writable(false);
 
-	const cursor = writable(AUTO);
+	setContext('hideUI', hideUI);
 
 	const show = debounce(
 		() => {
-			cursor.set(AUTO);
+			hideUI.set(false);
 		},
 		0,
 		{ leading: true, trailing: false }
 	);
 
 	const hide = debounce(() => {
-		cursor.set(NONE);
+		hideUI.set(true);
+		console.log('*');
 	}, 500);
 
 	function mousemove() {
@@ -30,6 +30,4 @@
 
 <svelte:window on:mousemove={mousemove} />
 
-<main style:cursor={$cursor}>
-	<slot />
-</main>
+<slot />

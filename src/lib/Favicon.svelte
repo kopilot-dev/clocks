@@ -21,5 +21,5 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={`/clock-hour-${$hour}.svg`} />
+	<link rel="icon" href={`/clocks/clock-hour-${$hour}.svg`} />
 </svelte:head>

@@ -3,6 +3,7 @@
 
 	import Favicon from '$lib/Favicon.svelte';
 	import Title from '$lib/Title.svelte';
+	import HideUi from '$lib/HideUI.svelte';
 
 	export const prerender = true;
 </script>
@@ -10,4 +11,6 @@
 <Favicon />
 <Title />
 
-<slot />
+<HideUi>
+	<slot />
+</HideUi>
