@@ -27,7 +27,7 @@
 		left: 0;
 		top: 0;
 		padding: 0.4em 0.5em;
-		font-size: 4em;
+		font-size: clamp(2.5rem, 4em, 4rem);
 		transform: scale(1);
 		opacity: 1;
 		transition: all 200ms;

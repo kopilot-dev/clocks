@@ -4,6 +4,7 @@
 	import { onMount, setContext } from 'svelte';
 
 	const hideUI = writable(false);
+	let isTouch = false;
 
 	setContext('hideUI', hideUI);
 
@@ -21,13 +22,21 @@
 	}, 500);
 
 	function mousemove() {
-		show();
-		hide();
+		if (!isTouch) {
+			show();
+			hide();
+		}
+	}
+
+	function toggle() {
+		if (isTouch) {
+			hideUI.update(($hideUI) => !$hideUI);
+		}
 	}
 
 	onMount(hide);
 </script>
 
-<svelte:window on:mousemove={mousemove} />
+<svelte:window on:mousemove={mousemove} on:touchstart={() => (isTouch = true)} on:click={toggle} />
 
 <slot />

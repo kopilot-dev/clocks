@@ -35,6 +35,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
+		align-content: center;
 		justify-content: center;
 		gap: 40px;
 		width: 60vw;
