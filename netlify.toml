@@ -3,3 +3,8 @@
 [build]
 command = "npm run build"
 publish = "build"
+
+[[rewrite]]
+from = "/*"
+to = "/index.html"
+status = 200
