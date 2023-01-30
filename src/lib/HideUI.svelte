@@ -18,7 +18,6 @@
 
 	const hide = debounce(() => {
 		hideUI.set(true);
-		console.log('*');
 	}, 500);
 
 	function mousemove() {
