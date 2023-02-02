@@ -2,16 +2,32 @@
 	import { animDur } from '$lib/const';
 	import SetFontSize from '$lib/SetFontSize.svelte';
 	import { wait } from '$lib/wait';
+	import { derived, get, writable } from 'svelte/store';
+	import { debounce } from 'lodash';
+	import { onMount } from 'svelte';
+	import { IconX } from '@tabler/icons-svelte';
 
-	let active = false;
+	const active = writable(false);
 	let width = 300;
 
 	let wrapper: HTMLDivElement;
 	let shapeshifter: HTMLDivElement;
 
+	const hideUI = writable(false);
+	let isTouch = false;
+
+	const isHidden = derived([hideUI, active], ([$hideUI, $active]) => {
+		return $hideUI || !$active;
+	});
+
+	const cursor = derived([hideUI, active], ([$hideUI, $active]) => {
+		if (!$active) return 'pointer';
+		return $hideUI ? 'none' : 'auto';
+	});
+
 	async function open() {
-		if (!active) {
-			active = true;
+		if (!get(active)) {
+			active.set(true);
 			const rect = wrapper.getBoundingClientRect();
 			shapeshifter.style.position = 'fixed';
 			shapeshifter.style.top = rect.top + 'px';
@@ -36,7 +52,7 @@
 	}
 
 	async function close() {
-		if (active) {
+		if (get(active)) {
 			const rect = wrapper.getBoundingClientRect();
 			shapeshifter.style.transition = 'all var(--anim-dur)';
 
@@ -55,27 +71,54 @@
 			shapeshifter.style.position = '';
 			shapeshifter.style.transition = '';
 
-			active = false;
+			active.set(false);
 		}
 	}
 
 	function onResize() {
-		if (active) {
+		if (get(active)) {
 			width = window.innerWidth;
 		}
 	}
 
 	function hover() {
-		if (!active) {
-			width = 450;
+		if (!get(active)) {
+			width = 420;
 		}
 	}
 
 	function noHover() {
-		if (!active) {
+		if (!get(active)) {
 			width = 300;
 		}
 	}
+
+	const show = debounce(
+		() => {
+			hideUI.set(false);
+		},
+		0,
+		{ leading: true, trailing: false }
+	);
+
+	const hide = debounce(() => {
+		hideUI.set(true);
+	}, 500);
+
+	function mousemove() {
+		if (!isTouch) {
+			show();
+			hide();
+		}
+	}
+
+	function toggle() {
+		if (isTouch) {
+			hideUI.update(($hideUI) => !$hideUI);
+		}
+	}
+
+	onMount(hide);
 </script>
 
 <svelte:window
@@ -83,6 +126,9 @@
 		if ('Escape' === ev.code) close();
 	}}
 	on:resize={onResize}
+	on:mousemove={mousemove}
+	on:touchstart={() => (isTouch = true)}
+	on:click={toggle}
 />
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -96,18 +142,23 @@
 	on:focus={hover}
 	on:mouseleave={noHover}
 	on:blur={noHover}
-	class:active
+	class:active={$active}
+	style:cursor={$cursor}
 >
-	<div class="shapeshifter" bind:this={shapeshifter} class:active>
+	<div class="shapeshifter" bind:this={shapeshifter} class:active={$active}>
 		<div class="background">
 			<slot name="background" />
 		</div>
 
-		<div class="main" class:active>
+		<div class="main" class:active={$active}>
 			<SetFontSize {width}>
 				<slot name="main" />
 			</SetFontSize>
 		</div>
+
+		<button class="close" class:hide={$isHidden} on:click={close}>
+			<IconX size={32} />
+		</button>
 	</div>
 </div>
 
@@ -132,13 +183,7 @@
 			position: relative;
 			width: 300px;
 			height: 200px;
-			background-color: hsla(0, 0%, 30%, 0.5);
-			background-color: #222;
 			transition: all var(--anim-dur);
-
-			&:not(.active) {
-				border-radius: 12px;
-			}
 
 			.background {
 				position: absolute;
@@ -146,8 +191,13 @@
 				left: 0;
 				right: 0;
 				bottom: 0;
-				opacity: 0;
+				overflow: hidden;
+				border-radius: 12px;
 				transition: all var(--anim-dur);
+			}
+
+			&.active .background {
+				border-radius: 0;
 			}
 
 			.main {
@@ -158,6 +208,50 @@
 				bottom: 0;
 				transition: all var(--anim-dur);
 			}
+
+			.close {
+				position: absolute;
+				left: 1rem;
+				top: 1rem;
+				width: 48px;
+				height: 48px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: hsl(0, 0%, 85%);
+				background-color: hsl(0, 0%, 10%);
+				border-radius: 100%;
+				border: none;
+				outline: none;
+				cursor: pointer;
+				transform: scale(1);
+				opacity: 1;
+				transition: all var(--anim-dur);
+
+				:global(svg) {
+					transform: scale(1);
+					transition: all var(--anim-dur);
+				}
+
+				&:hover {
+					transform: scale(1.05);
+
+					:global(svg) {
+						transform: scale(1.2);
+					}
+				}
+
+				&.hide {
+					opacity: 0;
+				}
+			}
+		}
+	}
+
+	@media (prefers-color-scheme: light) {
+		.wrapper .shapeshifter .close {
+			color: hsl(0, 0%, 15%);
+			background-color: hsl(0, 0%, 90%);
 		}
 	}
 </style>

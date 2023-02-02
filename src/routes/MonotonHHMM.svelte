@@ -4,14 +4,13 @@
 	import leftPad from '$lib/leftPad';
 	import Clock from './Clock.svelte';
 
-	const time = writable('00:00:00');
+	const time = writable('00:00');
 
 	function setTime() {
 		const date = new Date();
 		const hours = date.getHours().toString();
 		const minutes = date.getMinutes().toString();
-		const seconds = date.getSeconds().toString();
-		time.set([leftPad(hours), leftPad(minutes), leftPad(seconds)].join(':'));
+		time.set([leftPad(hours), leftPad(minutes)].join(':'));
 	}
 	setTime();
 
@@ -42,7 +41,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: hsl(0, 0%, 10%);
+		background-color: hsl(0, 0%, 15%);
 	}
 
 	.main {
@@ -57,7 +56,7 @@
 
 		.text {
 			font-family: Monoton;
-			font-size: 3.6ch;
+			font-size: 4.5ch;
 			color: hsl(0, 0%, 95%);
 		}
 	}
@@ -67,7 +66,7 @@
 			background-color: hsl(0, 0%, 85%);
 		}
 
-		.text {
+		.main .text {
 			color: hsl(0, 0%, 15%);
 		}
 	}

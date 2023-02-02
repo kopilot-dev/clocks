@@ -3,7 +3,6 @@
 
 	import Favicon from '$lib/Favicon.svelte';
 	import Title from '$lib/Title.svelte';
-	import HideUi from '$lib/HideUI.svelte';
 	import { animDur } from '$lib/const';
 
 	export const prerender = true;
@@ -16,6 +15,4 @@
 <Favicon />
 <Title />
 
-<HideUi>
-	<slot />
-</HideUi>
+<slot />

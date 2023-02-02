@@ -1,22 +1,17 @@
 <script lang="ts">
-	import AutoFontSize from '$lib/AutoFontSize.svelte';
-	import Monoton from '$lib/clocks/Monoton.svelte';
-	import Monoton2 from '$lib/clocks/Monoton2.svelte';
+	import MonotonHHMM from './MonotonHHMM.svelte';
+	import MonotonHHMMSS from './MonotonHHMMSS.svelte';
 
 	const clocks = [
-		{ path: '/monoton', component: Monoton },
-		{ path: '/monoton-simple', component: Monoton2 }
+		{ path: '#monoton', component: MonotonHHMM },
+		{ path: '#monoton2', component: MonotonHHMMSS }
 	];
 </script>
 
 <div class="background">
 	<div class="grid">
 		{#each clocks as clock}
-			<a href={clock.path}>
-				<AutoFontSize initialWidth={300}>
-					<svelte:component this={clock.component} />
-				</AutoFontSize>
-			</a>
+			<svelte:component this={clock.component} />
 		{/each}
 	</div>
 </div>
@@ -38,26 +33,9 @@
 		align-content: center;
 		justify-content: center;
 		gap: 40px;
-		width: 60vw;
+		width: 80vw;
 		min-width: 320px;
 		height: 100vh;
-		overflow: hidden;
-
-		a {
-			position: relative;
-			width: 300px;
-			height: 200px;
-			cursor: pointer;
-			border-radius: 16px;
-			overflow: hidden;
-			transform: scale(1);
-			transition: all 200ms;
-
-			&:hover {
-				box-shadow: 0 0 4rem hsla(0, 0%, 100%, 20%);
-				transform: scale(1.1);
-			}
-		}
 	}
 
 	@media (prefers-color-scheme: light) {
